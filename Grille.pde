@@ -47,6 +47,7 @@ class Grille {
     }
     lignes+=lgn;
     score+=(lvl+1)*scores[constrain(lgn, 0, 4)];
+    lvl = int(sqrt((lignes-5)/5))-1;
     maxScore=max(score, maxScore);
   }
   public void formesTrace() {
@@ -64,13 +65,19 @@ class Grille {
     int y = formeCourante.getPosY();
     bouge(x, y);
   }
-  public void tourne() {
+  public void tourneR() {
     int x = formeCourante.getPosX();
     int y = formeCourante.getPosY();
-    formeCourante.rotMatrix();
-    if (collision(x, y)) formeCourante.unRotMatrix();
+    formeCourante.rotR();
+    if (collision(x, y)) formeCourante.rotL();
   }
-  public void bas() {
+  public void tourneL() {
+    int x = formeCourante.getPosX();
+    int y = formeCourante.getPosY();
+    formeCourante.rotL();
+    if (collision(x, y)) formeCourante.rotR();
+  }
+  public boolean bas() {
     int x = formeCourante.getPosX();
     int y = formeCourante.getPosY()+1;
     if (!bouge(x, y)) {
@@ -91,7 +98,8 @@ class Grille {
       formeSuivante = new Forme(0);
       trace();
       formesTrace();
-    }
+      return false;
+    } else return true;
   }
   private boolean bouge(int px, int py) {
     if (!collision(px, py)) {

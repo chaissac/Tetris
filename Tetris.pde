@@ -1,4 +1,4 @@
-int ecran ;
+int ecran ; //<>//
 final int MENU  = 0 ;
 final int JOUE  = 1 ;
 final int PAUSE = 2 ;
@@ -19,34 +19,32 @@ void setup() {
   frameRate(VITESSE);
   fTitle = createFont("Arial Bold", 48, true);
   String[] lines = loadStrings("highscores.dat");
-  if (lines==null) { //<>//
+  if (lines==null) {
     lines = new String[1];
     lines[0]="0";
     saveStrings("highscores.dat", lines);
   }
   maxScore = Integer.parseInt(lines[0]);
-  score = 0;
-  lvl = 0;
   grille = new Grille(10, 22);
   ecran = MENU ;
 }
 void draw() {
-  frames = (frames+1)%VITESSE ;
+  frames = (frames+1)%int(VITESSE/(lvl+1)) ;
   decor();
   switch(ecran) {
   case MENU :
-    menu();
+    menu(); 
     break;
   case JOUE :
-    joue();
+    joue(); 
     break;
   case PAUSE :
-    pause();
+    pause(); 
     break;
   case OVER :
-    over();
+    over(); 
     break;
-  case HELP :
+  case HELP : 
     help();
     break;
   }
@@ -64,7 +62,6 @@ public void clavier() {
     }
 }
 public void keyPressed() {
-  println(keyCode);
   switch (ecran) {
   case JOUE :
     switch (keyCode) {
@@ -74,12 +71,22 @@ public void keyPressed() {
     case RIGHT :
       grille.droite();
       break;
-    case UP :
-      grille.tourne();
+    case 87 :
+      grille.tourneL();
+      break;
+    case 88 :
+      grille.tourneR();
       break;
     case DOWN :
       grille.bas();
       break;
+    case UP :
+      while (grille.bas()) {
+        // nop...
+      };
+      break;
+    default :
+      println(keyCode);
     }
     break;
   }
@@ -137,7 +144,8 @@ void decor() {
   text("TETRIS", (width-220)/2+220, 55) ;
   textFont(fTitle, 16);
   text("Score : "+score, (width-220)/2+220, 100);
-  text("Level : "+lvl, (width-220)/2+220, 140);
+  text("Lignes : "+lignes, (width-220)/2+220, 130);
+  text("Level : "+lvl, (width-220)/2+220, 160);
   text("HighScore : "+maxScore, (width-220)/2+220, 300);
   grille.trace();
 }
@@ -180,7 +188,7 @@ void help() {
   textAlign(CENTER);
   text("A I D E", width/2, 90);
   textFont(fTitle, 18);
-  text("[←] et [→] pour déplacer\n[↓] pour descendre plus vite\n[↑] pour rotation\n\n[P] pour pause\n\n[Q] pour quitter", width/2, 170);
+  text("[←] et [→] pour déplacer\n[↓] pour descendre plus vite\n[↑] pour descendre d'un coup\n[W] et [X] pour rotation\n\n[P] pour pause\n\n[Q] pour quitter", width/2, 170);
 }
 void over() {
   noStroke();

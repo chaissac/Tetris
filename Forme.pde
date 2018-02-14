@@ -94,7 +94,7 @@ class Forme { //<>//
   public int getMatrix(int i, int j) {
     return matrix[i][j];
   }
-  public void rotMatrix() {
+  public void rotR() {
     int[][] rot = new int[y][x];
     for (int i = 0; i < x; i++) {
       for (int j = 0; j < y; j++) {
@@ -106,7 +106,7 @@ class Forme { //<>//
     x=y; 
     y=tmp;
   }
-  public void unRotMatrix() {
+  public void rotL() {
     int[][] rot = new int[y][x];
     for (int i = 0; i < x; i++) {
       for (int j = 0; j < y; j++) {
