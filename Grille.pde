@@ -1,7 +1,6 @@
 class Grille {
   int[][] gr;
   int tailleX, tailleY;
-  color[] couleurs ={#000000, #FF0000, #00FF00, #FFFF00, #0000FF, #FF00FF, #00FFFF, #FFA000};
   int[] scores = {0, 40, 100, 300, 1200};
   Forme formeCourante, formeSuivante ;
   public Grille(int x, int y) {
@@ -10,53 +9,58 @@ class Grille {
   private void init(int x, int y) {
     tailleX=constrain(x, 10, 15);
     tailleY=constrain(y, 22, 25);
-    gr = new int[tailleX][tailleY+1];
-    for (int i=0; i<tailleX; i++) gr[i][tailleY]=8;
+    gr = new int[tailleX+4][tailleY+2];
+    for (int i=0; i<tailleX+4; i++) {
+      gr[i][tailleY]=8;
+      gr[i][tailleY+1]=8;
+    }
+    for (int j=0; j<tailleY+2; j++) {
+      gr[0][j]=8;
+      gr[1][j]=8;
+      gr[tailleX+2][j]=8;
+      gr[tailleX+3][j]=8;
+    }
     formeCourante = new Forme(0);
     formeCourante.place(tailleX);
     formeSuivante = new Forme(0);
   }
   public void trace() {
-    int lignes=0;
+    int lgn=0;
     stroke(255);
     for (int y=tailleY-1; y>=0; y--) {
       boolean plein = true ;
-      for (int x=0; x<tailleX; x++) {
+      for (int x=2; x<tailleX+2; x++) {
         if (gr[x][y]==0) plein = false ;
         fill(couleurs[constrain(gr[x][y], 0, 7)]);
-        rect(20+x*20, 20+y*20, 20, 20);
+        rect(x*20, 20+y*20, 20, 20);
       }
       if (plein) {
-        for (int i=0; i<tailleX; i++) {
-          for (int j=y; j>0; j++) {
+        for (int i=2; i<tailleX+2; i++) {
+          for (int j=y; j>1; j--) {
             gr[i][j]=gr[i][j-1];
           }
           gr[i][0]=0;
         }
-        lignes++;
+        lgn++;
+        y++;
       }
     }
-    int tx, ty;
-    for (int y=0; y<formeCourante.getY(); y++) {
-      for (int x=0; x<formeCourante.getX(); x++) 
-        if (formeCourante.getMatrix(x, y)!=0) {
-          tx = x+formeCourante.getPosX();
-          ty = y+formeCourante.getPosY();
-          if (tx>=0 && tx<tailleX && ty>=0 && ty<=tailleY) {
-            fill(couleurs[constrain(formeCourante.getMatrix(x, y), 0, 7)]);
-            rect(20+(tx)*20, 20+(ty)*20, 20, 20);
-          }
-        }
-    }
-    score+=(lvl+1)*scores[constrain(lignes, 0, 4)];
+    lignes+=lgn;
+    score+=(lvl+1)*scores[constrain(lgn, 0, 4)];
+    maxScore=max(score, maxScore);
+  }
+  public void formesTrace() {
+    stroke(255);
+    formeCourante.trace(40+20*formeCourante.getPosX(), 20+20*formeCourante.getPosY());
+    formeSuivante.trace(320, 200);
   }
   public void gauche() {
-    int x = max(0, formeCourante.getPosX()-1);
+    int x = formeCourante.getPosX()-1;
     int y = formeCourante.getPosY();
     bouge(x, y);
   }
   public void droite() {
-    int x = min(tailleX-formeCourante.getX(), formeCourante.getPosX()+1);
+    int x = formeCourante.getPosX()+1;
     int y = formeCourante.getPosY();
     bouge(x, y);
   }
@@ -75,11 +79,18 @@ class Grille {
       for (int i=0; i<formeCourante.getX(); i++)
         for (int j=0; j<formeCourante.getY(); j++) {
           c=formeCourante.getMatrix(i, j);
-          if (c!=0) gr[x+i][y+j]=c;
+          if (c!=0) gr[x+i+2][y+j]=c;
         }
       formeCourante=formeSuivante;
       formeCourante.place(tailleX);
+      if (collision(formeCourante.getPosX(), formeCourante.getPosY())) {
+        ecran=OVER;
+        String[] lines =  {maxScore+""};
+        saveStrings("highscores.dat", lines);
+      }
       formeSuivante = new Forme(0);
+      trace();
+      formesTrace();
     }
   }
   private boolean bouge(int px, int py) {
@@ -92,8 +103,9 @@ class Grille {
     for (int i=0; i<formeCourante.getX(); i++)
       for (int j=0; j<formeCourante.getY(); j++) 
         if ((py+j)>=0) {
-          if ((px+i)>=tailleX || (py+j)>=tailleY) return true;
-          if (gr[px+i][py+j]*formeCourante.getMatrix(i, j)!=0) return true;
+          if (px+i+2<tailleX+4 && py+j<tailleY+2) {
+            if (gr[px+i+2][py+j]*formeCourante.getMatrix(i, j)!=0) return true;
+          } else return true;
         }
     return false;
   }

@@ -1,30 +1,39 @@
 int ecran ;
-final int DEPART = 0 ;
-final int MENU  = 1 ;
-final int JOUE  = 2 ;
-final int PAUSE = 3 ;
-final int OVER  = 4 ;
+final int MENU  = 0 ;
+final int JOUE  = 1 ;
+final int PAUSE = 2 ;
+final int OVER  = 3 ;
+final int HELP  = 4 ;
 
-final int VITESSE = 120 ;
+final int VITESSE = 150 ;
+final color[] couleurs ={#000000, #FF0000, #00FF00, #FFFF00, #0000FF, #FF00FF, #00FFFF, #FFA000};
 
-int lvl, score, maxScore ;
+int lvl, score, maxScore, lignes, frames ;
+
 Grille grille ;
 
 PFont fTitle, fMain ;
-int frames ;
 
 void setup() {
   size(500, 480);
   frameRate(VITESSE);
-  fTitle = createFont("Arial Bold", 32, true);
+  fTitle = createFont("Arial Bold", 48, true);
+  String[] lines = loadStrings("highscores.dat");
+  if (lines==null) { //<>//
+    lines = new String[1];
+    lines[0]="0";
+    saveStrings("highscores.dat", lines);
+  }
+  maxScore = Integer.parseInt(lines[0]);
+  score = 0;
+  lvl = 0;
+  grille = new Grille(10, 22);
   ecran = MENU ;
 }
 void draw() {
   frames = (frames+1)%VITESSE ;
+  decor();
   switch(ecran) {
-  case DEPART :
-    depart();
-    break;
   case MENU :
     menu();
     break;
@@ -32,10 +41,13 @@ void draw() {
     joue();
     break;
   case PAUSE :
-    //pause();
+    pause();
     break;
   case OVER :
-    //over();
+    over();
+    break;
+  case HELP :
+    help();
     break;
   }
 }
@@ -44,35 +56,36 @@ public void clavier() {
     switch (ecran) {
     case JOUE :
       switch (keyCode) {
-        case DOWN :
-        
+      case DOWN :
+
         break;
       }
       break;
     }
 }
 public void keyPressed() {
-    switch (ecran) {
-    case JOUE :
-      switch (keyCode) {
-      case LEFT : 
-        grille.gauche();
-        break;
-      case RIGHT :
-        grille.droite();
-        break;
-      case UP :
-        grille.tourne();
-        break;
-      }
+  println(keyCode);
+  switch (ecran) {
+  case JOUE :
+    switch (keyCode) {
+    case LEFT :  
+      grille.gauche();
+      break;
+    case RIGHT :
+      grille.droite();
+      break;
+    case UP :
+      grille.tourne();
+      break;
+    case DOWN :
+      grille.bas();
       break;
     }
+    break;
+  }
 }
 public void keyReleased() {
   switch (ecran) {
-  case DEPART :
-    ecran=MENU;
-    break;
   case MENU :
     switch (key+"") {
     case "s" :
@@ -92,6 +105,10 @@ public void keyReleased() {
     case "Q" :
       ecran=MENU;
       break;
+    case "h" :
+    case "H" :
+      ecran=HELP;
+      break;
     }
     break;
   case PAUSE :
@@ -103,37 +120,15 @@ public void keyReleased() {
       break;
     }
     break;
+  case OVER :
+    ecran=MENU;
+    break;
+  case HELP :
+    ecran=JOUE;
+    break;
   }
 }
-void depart() {
-  background(0);
-  fill(random(255), random(255), random(255));
-  stroke(255);
-  textAlign(CENTER);
-  textFont(fTitle, 64);
-  text("TETRIS", width/2, height/2);
-  textFont(fTitle, 24);
-  fill(200);
-  text("press a key to start", width/2, height/2+50);
-}
-void menu() {
-  background(0);
-  fill(255, 255, 200);
-  stroke(255);
-  textFont(fTitle, 48);
-  textAlign(CENTER);
-  text("TETRIS", width/2, 60) ;
-  textFont(fTitle, 24);
-  fill(200);
-  text("press S to start", width/2, height/2+50);
-}
-void newGame() {
-  score = 0;
-  lvl = 0;
-  grille = new Grille(10, 22);
-  ecran=JOUE;
-}
-void joue() {
+void decor() {
   background(0);
   fill(255);
   stroke(255);
@@ -143,9 +138,56 @@ void joue() {
   textFont(fTitle, 16);
   text("Score : "+score, (width-220)/2+220, 100);
   text("Level : "+lvl, (width-220)/2+220, 140);
-  if (frames==0) {
-      //grille.bas();
-      if (keyPressed) if (keyCode==DOWN) grille.bas();
-  }
+  text("HighScore : "+maxScore, (width-220)/2+220, 300);
   grille.trace();
+}
+void menu() {
+  textAlign(CENTER);
+  textFont(fTitle, 24);
+  fill(200, 200, 0);
+  noStroke();
+  text("S to start", 360, height/2-30);
+}
+void newGame() {
+  score = 0;
+  lvl = 0;
+  grille = new Grille(10, 22);
+  ecran=JOUE;
+}
+void joue() {
+  grille.formesTrace();
+  if (frames==0) {
+    grille.bas();
+  }
+}
+void pause() {
+  grille.formesTrace();
+  noStroke();
+  fill(16, 224);
+  rect(20, height/2-30, width-40, 60);
+  fill(255);
+  textFont(fTitle, 32);
+  textAlign(CENTER);
+  text("P A U S E", width/2, height/2+10);
+}
+void help() {
+  grille.formesTrace();
+  noStroke();
+  fill(16, 232);
+  rect(20, 20, width-40, height-40);
+  fill(255);
+  textFont(fTitle, 48);
+  textAlign(CENTER);
+  text("A I D E", width/2, 90);
+  textFont(fTitle, 18);
+  text("[←] et [→] pour déplacer\n[↓] pour descendre plus vite\n[↑] pour rotation\n\n[P] pour pause\n\n[Q] pour quitter", width/2, 170);
+}
+void over() {
+  noStroke();
+  fill(16, 224);
+  rect(20, height/2-30, width-40, 60);
+  fill(255);
+  textFont(fTitle, 32);
+  textAlign(CENTER);
+  text("GAME OVER !", width/2, height/2+10);
 }
