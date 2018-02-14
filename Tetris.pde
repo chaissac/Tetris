@@ -5,7 +5,7 @@ final int PAUSE = 2 ;
 final int OVER  = 3 ;
 final int HELP  = 4 ;
 
-final int VITESSE = 150 ;
+final int VITESSE = 120 ;
 final color[] couleurs ={#000000, #FF0000, #00FF00, #FFFF00, #0000FF, #FF00FF, #00FFFF, #FFA000};
 
 int lvl, score, maxScore, lignes, frames ;
@@ -29,7 +29,7 @@ void setup() {
   ecran = MENU ;
 }
 void draw() {
-  frames = (frames+1)%int(VITESSE/(lvl+1)) ;
+  frames = (frames+1)%int(VITESSE/max(1,lvl+1)) ;
   decor();
   switch(ecran) {
   case MENU :
@@ -65,22 +65,28 @@ public void keyPressed() {
   switch (ecran) {
   case JOUE :
     switch (keyCode) {
-    case LEFT :  
+    case LEFT :
+    case 100 :
       grille.gauche();
       break;
     case RIGHT :
+    case 102 :
       grille.droite();
       break;
     case 87 :
+    case 103 :
       grille.tourneL();
       break;
     case 88 :
+    case 105 :
       grille.tourneR();
       break;
     case DOWN :
+    case 101 :
       grille.bas();
       break;
     case UP :
+    case 104 :
       while (grille.bas()) {
         // nop...
       };
@@ -159,6 +165,7 @@ void menu() {
 void newGame() {
   score = 0;
   lvl = 0;
+  lignes = 0;
   grille = new Grille(10, 22);
   ecran=JOUE;
 }

@@ -58,10 +58,10 @@ class Forme { //<>//
     stroke(200);
     for (int j=0; j<y; j++) {
       for (int i=0; i<x; i++) 
-        if (getMatrix(i, j)!=0) {
+        if (getC(i, j)!=0) {
           tx = i+posX;
           ty = j+posY;
-          c=constrain(getMatrix(i,j), 0, 7);
+          c=constrain(getC(i,j), 0, 7);
           if (c>0) {
             fill(couleurs[c]);
             rect(px+i*20, py+j*20, 20, 20);
@@ -91,7 +91,7 @@ class Forme { //<>//
     posX = i;
     posY = j;
   }
-  public int getMatrix(int i, int j) {
+  public int getC(int i, int j) {
     return matrix[i][j];
   }
   public void rotR() {
