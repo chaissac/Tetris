@@ -1,4 +1,4 @@
-int ecran ; //<>//
+int ecran, prev ; //<>//
 final int MENU  = 0 ;
 final int JOUE  = 1 ;
 final int PAUSE = 2 ;
@@ -105,6 +105,11 @@ public void keyReleased() {
     case "S" :
       newGame();
       break;
+    case "h" :
+    case "H" :
+      prev=ecran;
+      ecran=HELP;
+      break;
     }
     break;
   case JOUE :
@@ -120,6 +125,7 @@ public void keyReleased() {
       break;
     case "h" :
     case "H" :
+      prev=ecran;
       ecran=HELP;
       break;
     }
@@ -137,7 +143,7 @@ public void keyReleased() {
     ecran=MENU;
     break;
   case HELP :
-    ecran=JOUE;
+    ecran=prev;
     break;
   }
 }
@@ -153,6 +159,7 @@ void decor() {
   text("Lignes : "+lignes, (width-220)/2+220, 130);
   text("Level : "+lvl, (width-220)/2+220, 160);
   text("HighScore : "+maxScore, (width-220)/2+220, 300);
+  text("[H] pour obtenir de l'aide", (width-220)/2+220, height-40);
   grille.trace();
 }
 void menu() {
@@ -195,7 +202,7 @@ void help() {
   textAlign(CENTER);
   text("A I D E", width/2, 90);
   textFont(fTitle, 18);
-  text("[←] et [→] pour déplacer\n[↓] pour descendre plus vite\n[↑] pour descendre d'un coup\n[W] et [X] pour rotation\n\n[P] pour pause\n\n[Q] pour quitter", width/2, 170);
+  text("[←] et [→] pour déplacer\n\n[↓] pour descendre plus vite\n[↑] pour descendre d'un coup\n\n[W] et [X] pour rotation\n\n[P] pour pause\n\n[Q] pour quitter la partie", width/2, 170);
 }
 void over() {
   noStroke();

@@ -45,13 +45,13 @@ class Grille {
     }
     lignes+=lgn;
     score+=(lvl+1)*scores[constrain(lgn, 0, 4)];
-    lvl = max(0, round(sqrt((lignes-5)/5))-1);
+    lvl = max(0, round(sqrt((lignes-5)/4))-1);
     maxScore=max(score, maxScore);
   }
   public void formesTrace() {
     stroke(255);
     formeCourante.trace(40+20*formeCourante.getPosX(), 20+20*formeCourante.getPosY());
-    formeSuivante.trace(320, 200);
+    formeSuivante.trace(330, 200);
   }
   public void gauche() {
     int x = formeCourante.getPosX()-1;
