@@ -70,11 +70,11 @@ public void keyPressed() {
       grille.gauche();
       break;
     case RIGHT :
-    case 102 :
+    case 99 :
       grille.droite();
       break;
     case 87 :
-    case 103 :
+    case 97 :
       grille.tourneL();
       break;
     case 88 :
