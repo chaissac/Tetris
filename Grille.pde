@@ -2,7 +2,7 @@ class Grille {
   int[][] gr;
   int tailleX, tailleY;
   int[] scores = {0, 40, 100, 300, 1200};
-  Forme formeCourante, formeSuivante ;
+  Forme formeCourante, formeSuivante, ghost ;
   public Grille(int x, int y) {
     init(x, y);
   }
@@ -32,8 +32,8 @@ class Grille {
         rect(x*20+40, 20+y*20, 20, 20);
         if (getC(x, y)==0) plein = false ;
         else {
-        tint(couleurs[constrain(getC(x, y), 0, 7)]);
-        image(carre, x*20+40, 20+y*20, 20, 20);
+          tint(couleurs[constrain(getC(x, y), 0, 7)]);
+          image(carre, x*20+40, 20+y*20, 20, 20);
         }
       }
       if (plein) {
@@ -51,6 +51,11 @@ class Grille {
     score+=(lvl+1)*scores[constrain(lgn, 0, 4)];
     lvl = max(0, round(sqrt((lignes-5)/4))-1);
     maxScore=max(score, maxScore);
+    if ((ecran==JOUE) && ghostOn) {
+      int y = formeCourante.getPosY();
+      while (!collision(formeCourante.getPosX(), y+1)) y++;
+      formeCourante.contour(40+20*formeCourante.getPosX(), 20+20*y);
+    }
   }
   public void formesTrace() {
     stroke(255);

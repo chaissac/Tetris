@@ -6,12 +6,12 @@ final int OVER  = 3 ;
 final int HELP  = 4 ;
 
 final int VITESSE = 120 ;
-final color[] couleurs ={#000000, #FF0000, #00FF00, #FFFF00, #0000FF, #FF00FF, #00FFFF, #FFA000};
-
-PImage carre ;
+final color[] couleurs ={#000000, #FF0000, #00FF00, #FFFF00, #0000FF, #FF00FF, #00FFFF, #FF9000};
 
 int lvl, score, maxScore, lignes, frames ;
+boolean ghostOn = true ;
 
+PImage carre ;
 Grille grille ;
 
 PFont fTitle, fMain ;
@@ -33,7 +33,7 @@ void setup() {
   ecran = MENU ;
 }
 void draw() {
-  frames = (frames+1)%int(VITESSE/max(1,lvl+1)) ;
+  frames = (frames+1)%int(VITESSE/max(1, lvl+1)) ;
   decor();
   switch(ecran) {
   case MENU :
@@ -70,27 +70,25 @@ public void keyPressed() {
   case JOUE :
     switch (keyCode) {
     case LEFT :
-    case 100 :
       grille.gauche();
       break;
     case RIGHT :
-    case 99 :
       grille.droite();
       break;
     case 87 :
-    case 97 :
+    case 90 :
       grille.tourneL();
       break;
-    case 88 :
-    case 105 :
+    case UP :
       grille.tourneR();
       break;
     case DOWN :
-    case 101 :
       grille.bas();
       break;
-    case UP :
-    case 104 :
+    case ESC :
+      ecran=PAUSE;
+      break;
+    case 32 :
       while (grille.bas()) {
         // nop...
       };
@@ -120,12 +118,11 @@ public void keyReleased() {
     switch (key+"") {
     case "P" :
     case "p" :
-    case " " :
       ecran=PAUSE;
       break;
-    case "q" :
-    case "Q" :
-      ecran=MENU;
+    case "g" :
+    case "G" :
+      ghostOn=!ghostOn;
       break;
     case "h" :
     case "H" :
@@ -140,6 +137,10 @@ public void keyReleased() {
     case "p" :
     case " " :
       ecran=JOUE;
+      break;
+    case "q" :
+    case "Q" :
+      ecran=MENU;
       break;
     }
     break;
@@ -190,23 +191,25 @@ void pause() {
   grille.formesTrace();
   noStroke();
   fill(16, 224);
-  rect(20, height/2-30, width-40, 60);
+  rect(20, height/2-30, width-40, 90);
   fill(255);
   textFont(fTitle, 32);
   textAlign(CENTER);
   text("P A U S E", width/2, height/2+10);
+  textFont(fTitle, 16);
+  text("[Q] pour quitter le jeu", width/2, height/2+40);
 }
 void help() {
   grille.formesTrace();
   noStroke();
-  fill(16, 232);
-  rect(20, 20, width-40, height-40);
+  fill(16, 220);
+  rect(20, 20, width-40, height-35);
   fill(255);
   textFont(fTitle, 48);
   textAlign(CENTER);
   text("A I D E", width/2, 90);
   textFont(fTitle, 18);
-  text("[←] et [→] pour déplacer\n\n[↓] pour descendre plus vite\n[↑] pour descendre d'un coup\n\n[W] et [X] pour rotation\n\n[P] pour pause\n\n[Q] pour quitter la partie", width/2, 170);
+  text("[←] et [→] pour déplacer (gauche-droite)\n[↓] pour descendre plus vite (soft-drop)\n\n[↑] pour tourner sens horaire (rotation droite)\n[W] ou [Z] pour tourner sens horaire (rotation droite)\n\n[ESPACE] pour tomber direct (hard-drop)\n\n[G] Aide Fantome (Ghost) On/off\n\n[ESC]/[Echap] ou [P] pour pause", width/2, 160);
 }
 void over() {
   noStroke();

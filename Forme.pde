@@ -71,6 +71,22 @@ class Forme { //<>//
           }
         }
     }
+  }  
+  void contour(int px, int py) {
+    int tx, ty, c;
+    for (int j=0; j<y; j++) {
+      for (int i=0; i<x; i++) 
+        if (getC(i, j)!=0) {
+          tx = i+posX;
+          ty = j+posY;
+          c=constrain(getC(i, j), 0, 7);
+          if (c>0) {
+            fill(couleurs[c],0);
+            stroke(couleurs[c]);
+            rect(px+i*20, py+j*20, 20, 20);
+          }
+        }
+    }
   }
   public int getX() {
     return x;
