@@ -24,13 +24,17 @@ class Grille {
   }
   public void trace() {
     int lgn=0;
-    stroke(255);  
+    stroke(127);  
     for (int y=tailleY-1; y>=0; y--) {
       boolean plein = true ;
       for (int x=0; x<tailleX; x++) {
-        if (getC(x, y)==0) plein = false ;
         fill(couleurs[constrain(getC(x, y), 0, 7)]);
         rect(x*20+40, 20+y*20, 20, 20);
+        if (getC(x, y)==0) plein = false ;
+        else {
+        tint(couleurs[constrain(getC(x, y), 0, 7)]);
+        image(carre, x*20+40, 20+y*20, 20, 20);
+        }
       }
       if (plein) {
         for (int i=0; i<tailleX; i++) {
@@ -82,10 +86,10 @@ class Grille {
       int c;
       y--;
       for (int i=0; i<formeCourante.getX(); i++)
-      for (int j=0; j<formeCourante.getY(); j++) {
-        c=formeCourante.getC(i, j);
-        if (c!=0) setC(x+i, y+j, c);
-      }
+        for (int j=0; j<formeCourante.getY(); j++) {
+          c=formeCourante.getC(i, j);
+          if (c!=0) setC(x+i, y+j, c);
+        }
       formeCourante=formeSuivante;
       formeCourante.place(tailleX);
       if (collision(formeCourante.getPosX(), formeCourante.getPosY())) {

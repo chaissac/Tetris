@@ -8,6 +8,8 @@ final int HELP  = 4 ;
 final int VITESSE = 120 ;
 final color[] couleurs ={#000000, #FF0000, #00FF00, #FFFF00, #0000FF, #FF00FF, #00FFFF, #FFA000};
 
+PImage carre ;
+
 int lvl, score, maxScore, lignes, frames ;
 
 Grille grille ;
@@ -17,6 +19,8 @@ PFont fTitle, fMain ;
 void setup() {
   size(500, 480);
   frameRate(VITESSE);
+  carre = loadImage("tetris.png");
+  imageMode(CORNER);
   fTitle = createFont("Arial Bold", 48, true);
   String[] lines = loadStrings("highscores.dat");
   if (lines==null) {

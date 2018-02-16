@@ -2,6 +2,7 @@ class Forme { //<>//
   String tetra = "";
   int x, y, posX, posY, type, tailleX ;
   int[][] matrix ;
+
   public Forme(int t) {
     if (t==0) t=int(random(7))+1;
     type=t;
@@ -61,10 +62,12 @@ class Forme { //<>//
         if (getC(i, j)!=0) {
           tx = i+posX;
           ty = j+posY;
-          c=constrain(getC(i,j), 0, 7);
+          c=constrain(getC(i, j), 0, 7);
           if (c>0) {
-            fill(couleurs[c]);
-            rect(px+i*20, py+j*20, 20, 20);
+            //fill(couleurs[c]);
+            //rect(px+i*20, py+j*20, 20, 20);
+            tint(couleurs[c]);
+            image(carre, px+i*20, py+j*20, 20, 20);
           }
         }
     }
