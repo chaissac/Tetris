@@ -53,18 +53,6 @@ void draw() {
     break;
   }
 }
-public void clavier() {
-  if (keyPressed)
-    switch (ecran) {
-    case JOUE :
-      switch (keyCode) {
-      case DOWN :
-
-        break;
-      }
-      break;
-    }
-}
 public void keyPressed() {
   switch (ecran) {
   case JOUE :
@@ -175,9 +163,7 @@ void menu() {
   text("S to start", 360, height/2-30);
 }
 void newGame() {
-  score = 0;
-  lvl = 0;
-  lignes = 0;
+  score = lvl = lignes = 0;
   grille = new Grille(10, 22);
   ecran=JOUE;
 }

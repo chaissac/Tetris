@@ -9,28 +9,23 @@ class Forme { //<>//
     switch(type) {
     case 1 : 
       tetra = "110011000"; 
-      x=3; 
-      y=3 ;
+      x=y=3 ;
       break; // Z Rouge
     case 2 : 
       tetra = "022220000"; 
-      x=3; 
-      y=3;
+      x=y=3;
       break; // S Vert
     case 3 : 
       tetra = "3333"; 
-      x=2; 
-      y=2; 
+      x=y=2; 
       break; // O Jaune
     case 4 : 
       tetra = "400444000"; 
-      x=3; 
-      y=3;
+      x=y=3;
       break; // J Bleu
     case 5 : 
       tetra = "050555000"; 
-      x=3; 
-      y=3; 
+      x=y=3; 
       break; // T Magenta
     case 6 : 
       tetra = "000066660000"; 
@@ -39,15 +34,13 @@ class Forme { //<>//
       break; // I Cyan
     case 7 : 
       tetra = "007777000"; 
-      x=3; 
-      y=3; 
+      x=y=3; 
       break; // L Orange
     }
     matrix = new int[x][y];
     for (int i=0; i<x; i++)
-      for (int j=0; j<y; j++) {
+      for (int j=0; j<y; j++)
         matrix[i][j]=Integer.parseInt(str(tetra.charAt(i+x*j)));
-      }
   }
   public void place(int tx) {
     tailleX = tx;
@@ -64,8 +57,6 @@ class Forme { //<>//
           ty = j+posY;
           c=constrain(getC(i, j), 0, 7);
           if (c>0) {
-            //fill(couleurs[c]);
-            //rect(px+i*20, py+j*20, 20, 20);
             tint(couleurs[c]);
             image(carre, px+i*20, py+j*20, 20, 20);
           }
@@ -81,7 +72,7 @@ class Forme { //<>//
           ty = j+posY;
           c=constrain(getC(i, j), 0, 7);
           if (c>0) {
-            fill(couleurs[c],0);
+            fill(couleurs[c], 0);
             stroke(couleurs[c]);
             rect(px+i*20, py+j*20, 20, 20);
           }
